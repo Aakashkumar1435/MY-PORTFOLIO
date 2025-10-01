@@ -1,0 +1,37 @@
+/* Typewriter effect */
+.typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid var(--color-neonCyan, #00f5ff);
+  width: 0ch;
+  /* You can tweak these with CSS vars from the component */
+  animation:
+    typing var(--typing-duration, 2.4s) steps(var(--typing-ch)) var(--typing-delay, .2s) both,
+    caret .9s step-end infinite;
+}
+
+/* typing + caret */
+@keyframes typing {
+  from { width: 0ch; }
+  to   { width: var(--typing-ch, 0)ch; } /* we still use a var for final width */
+}
+/* Blinking caret used in the hero title */
+.caret {
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: var(--color-neonCyan, #00f5ff);
+  margin-left: 2px;
+  animation: caretBlink .9s step-end infinite;
+}
+@keyframes caretBlink { 50% { opacity: 0 } }
+
+
+/* (keep your existing) */
+@keyframes particleFloat {
+  0%   { transform: translateY(100vh) rotateZ(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-10vh) rotateZ(360deg); opacity: 0; }
+}
