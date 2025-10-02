@@ -1,37 +1,45 @@
 "use client";
 
+import Link from "next/link";
 import { profile } from "@/lib/data";
 import Particles from "@/components/site/Particles";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Hero() {
-  const name = profile.name; // "Aakash Kumar"
-  const [text, setText] = useState("");        // what’s currently shown
-  const [done, setDone] = useState(false);     // typing finished?
+  const name = profile.name;
+  const [text, setText] = useState("");
+  const [done, setDone] = useState(false);
+
+  // keep refs so we can clean up timers (avoids memory leaks / StrictMode double-invoke issues)
+  const tRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const iRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     let i = 0;
-    const speedMs = 150;  // typing speed (lower = faster)
-    const delayMs = 500;  // delay before typing starts
+    const speedMs = 150; // typing speed
+    const delayMs = 500; // delay before typing starts
 
-    const start = setTimeout(() => {
-      const id = setInterval(() => {
+    tRef.current = setTimeout(() => {
+      iRef.current = setInterval(() => {
         i++;
         setText(name.slice(0, i));
         if (i >= name.length) {
-          clearInterval(id);
+          if (iRef.current) clearInterval(iRef.current);
           setDone(true);
         }
       }, speedMs);
     }, delayMs);
 
-    return () => clearTimeout(start);
+    return () => {
+      if (tRef.current) clearTimeout(tRef.current);
+      if (iRef.current) clearInterval(iRef.current);
+    };
   }, [name]);
 
   return (
     <section
-      id="home" /* ✅ section anchor */
+      id="home"
       className="relative min-h-[100svh] flex items-center justify-center bg-hero-radial overflow-hidden"
     >
       {/* soft cyan/magenta glows */}
@@ -48,7 +56,7 @@ export default function Hero() {
 
       {/* content */}
       <div className="relative z-[1] text-center px-6">
-        {/* Typewriter heading (text grows in JS) */}
+        {/* Typewriter heading */}
         <h1
           className="gradient-text inline-block text-[40px] md:text-[86px] font-black leading-[1.05] animate-gradientShift"
           suppressHydrationWarning
@@ -78,27 +86,27 @@ export default function Hero() {
           {profile.blurb}
         </motion.p>
 
-        {/* CTA buttons */}
+        {/* CTA buttons (use <Link> for internal routes to satisfy ESLint) */}
         <motion.div
           className="mt-10 flex items-center justify-center gap-5"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.4 }}
         >
-          {/* ✅ go to in-page section (works from any route) */}
-          <a
+          <Link
             href="/#projects"
             className="rounded-full px-7 py-3.5 font-semibold text-black shadow-lg"
             style={{ background: "linear-gradient(45deg,#00f5ff,#ff00f5)" }}
           >
             View My Work
-          </a>
-          <a
+          </Link>
+
+          <Link
             href="/#contact"
             className="rounded-full px-7 py-3.5 font-semibold border-2 border-neonCyan text-white"
           >
             Get In Touch
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>
