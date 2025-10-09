@@ -16,22 +16,28 @@ export default function About() {
 
       <div className="mt-12 grid md:grid-cols-2 gap-14 items-start">
         {/* Left text column */}
-        <div className="text-white/80 text-lg leading-8">
-          <h3 className="text-neonCyan text-2xl font-semibold mb-4">
-            Passionate Creator
-          </h3>
-          <p className="mb-5">
-            With over 3 years of experience in web development and design, I
-            specialize in creating immersive digital experiences that push the
-            boundaries of what&apos;s possible on the web.
-          </p>
-          <p>
-            I believe in the power of clean code, thoughtful design, and
-            continuous learning. When I&apos;m not coding, you&apos;ll find me
-            exploring new technologies, contributing to open-source projects, or
-            mentoring aspiring developers.
-          </p>
-        </div>
+<div className="text-white/80 text-lg leading-8">
+  <h3 className="text-neonCyan text-2xl font-semibold mb-4">
+    Passionate Creator
+  </h3>
+
+  <p className="mb-5">
+    I am Aakash Kumar — a full-stack developer focused on the MERN stack and
+    Next.js. I love turning ideas into fast, accessible products: clean REST APIs
+    with Node.js/Express, well-designed MongoDB schemas, and polished React/Next.js
+    interfaces. I have shipped 5+ projects from DSA visualizers and mini-games to a
+    full EdTech platform, learning something new with each build.
+  </p>
+
+  <p>
+    These days I am sharpening TypeScript, testing, and cloud deployments
+    (Vercel/Render), and exploring practical AI/ML integrations. I enjoy clean
+    code, thoughtful UX, and steady iteration. I am actively open to internships,
+    junior roles, and collaborative projects—if you are building something
+    interesting, let’s talk.
+  </p>
+</div>
+
 
         {/* Right stats grid */}
         <div className="grid grid-cols-2 gap-6">
