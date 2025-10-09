@@ -9,15 +9,23 @@ type Feature = { title: string; desc: string };
 export default function ProjectDetail(props: {
   title: string;
   subtitle?: string;
-  tags?: string[];
+  tags?: string[];              // kept if you ever want tags later
   description: string;
   tech: string[];
   features?: Feature[];
-  repoUrl?: string; // GitHub link
+  repoUrl?: string | null;      // if provided -> “View Code” button
 }) {
-  const { title, subtitle, tags = [], description, tech, features = [], repoUrl } = props;
+  const {
+    title,
+    subtitle,
+    description,
+    tech,
+    features = [],
+    repoUrl = null,
+  } = props;
 
-  const titleRef = useRef(null);
+  // animate section title + cards when they enter
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
   const inView = useInView(titleRef, { once: true, margin: "-100px 0px -100px 0px" });
   const titleControls = useAnimationControls();
 
@@ -25,30 +33,18 @@ export default function ProjectDetail(props: {
     if (inView) titleControls.start({ opacity: 1, y: 0, transition: { duration: 0.6 } });
   }, [inView, titleControls]);
 
-  // fallback (safety) — render button with default if nothing passed
-  const repo = repoUrl || "https://github.com/Aakashkumar1435/CrackIt";
-
   return (
     <div className="flex min-h-screen pt-24 md:pt-28">
-      {/* LEFT panel */}
+      {/* LEFT panel (sticky) */}
       <aside className="w-full md:w-1/2 px-6 md:px-14 py-10 md:py-16 md:sticky md:top-24 self-start">
         <h1 className="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
           {title}
         </h1>
 
-        {subtitle && <p className="mt-4 text-white/70 text-base md:text-lg">{subtitle}</p>}
-
-        {!!tags.length && (
-          <div className="mt-6 flex flex-wrap gap-2">
-            {tags.map((t) => (
-              <span
-                key={t}
-                className="px-3 py-1 rounded-full text-xs uppercase tracking-wide border border-[#667eea] text-[#00d4ff]"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
+        {subtitle && (
+          <p className="mt-4 text-white/70 text-base md:text-lg">
+            {subtitle}
+          </p>
         )}
 
         <p className="mt-6 text-white/80 leading-8">{description}</p>
@@ -65,48 +61,59 @@ export default function ProjectDetail(props: {
           ))}
         </div>
 
-        {/* View Code button (always rendered; uses fallback link) */}
-        <a
-          href={repo}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-8 inline-flex items-center gap-2 rounded-full px-5 py-3 font-semibold text-black shadow-lg transition-transform hover:-translate-y-0.5"
-          style={{ background: "linear-gradient(45deg,#00f5ff,#ff00f5)" }}
-          aria-label="View source code on GitHub"
-        >
-          {/* tiny GitHub svg (no dependency) */}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="-mt-[1px]">
-            <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.84 2.81 1.31 3.49 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.54-1.52.12-3.16 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.29-1.23 3.29-1.23.66 1.64.24 2.86.12 3.16.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.47 5.92.43.37.81 1.11.81 2.24v3.33c0 .32.22.7.82.58A12 12 0 0 0 12 .5Z"/>
-          </svg>
-          View Code
-        </a>
+        {/* CTA row */}
+        <div className="mt-8 flex flex-wrap gap-3">
+          {repoUrl ? (
+            <a
+              href={repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-semibold text-black shadow-lg transition-transform hover:scale-[1.02]"
+              style={{ background: "linear-gradient(45deg,#00f5ff,#ff00f5)" }}
+            >
+              View Code
+              <span aria-hidden>↗</span>
+            </a>
+          ) : (
+            <span className="inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold border border-white/10 bg-white/5 text-white/70">
+              Code not available
+            </span>
+          )}
+        </div>
       </aside>
 
-      {/* RIGHT panel — only if features provided */}
+      {/* RIGHT panel (Key Features) – visible on md+ to match your screenshot */}
       {features.length > 0 && (
         <main
           className="hidden md:block w-1/2 px-6 md:px-14 py-16 relative"
           style={{
-            background: "linear-gradient(135deg, rgba(102,126,234,.10), rgba(118,75,162,.10))",
+            background:
+              "linear-gradient(135deg, rgba(102,126,234,.10), rgba(118,75,162,.10))",
           }}
         >
+          {/* floating glow blobs */}
           <div
             className="absolute w-[260px] h-[260px] rounded-full blur-[60px]"
             style={{
-              top: "10%", right: "10%",
-              background: "radial-gradient(circle, rgba(102,126,234,.35) 0%, transparent 70%)",
+              top: "10%",
+              right: "10%",
+              background:
+                "radial-gradient(circle, rgba(102,126,234,.35) 0%, transparent 70%)",
               animation: "floatY 6s ease-in-out infinite",
             }}
           />
           <div
             className="absolute w-[260px] h-[260px] rounded-full blur-[60px]"
             style={{
-              bottom: "18%", right: "30%",
-              background: "radial-gradient(circle, rgba(118,75,162,.35) 0%, transparent 70%)",
+              bottom: "18%",
+              right: "30%",
+              background:
+                "radial-gradient(circle, rgba(118,75,162,.35) 0%, transparent 70%)",
               animation: "floatY 6s ease-in-out 2s infinite",
             }}
           />
 
+          {/* Key features */}
           <motion.h2
             ref={titleRef}
             initial={{ opacity: 0, y: 30 }}
@@ -118,12 +125,13 @@ export default function ProjectDetail(props: {
 
           <div className="mt-8">
             {features.map((f, i) => (
-              <FeatureCard key={f.title} feature={f} index={i} />
+              <FeatureCard key={`${f.title}-${i}`} feature={f} index={i} />
             ))}
           </div>
         </main>
       )}
 
+      {/* tiny keyframes (scoped) */}
       <style jsx>{`
         @keyframes floatY {
           0%, 100% { transform: translateY(0) scale(1); }
@@ -141,7 +149,7 @@ function FeatureCard({
   feature: { title: string; desc: string };
   index: number;
 }) {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const inView = useInView(ref, { once: true, margin: "-100px 0px -100px 0px" });
 
   return (

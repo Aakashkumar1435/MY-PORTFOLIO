@@ -4,37 +4,30 @@ import Link from "next/link";
 import { profile } from "@/lib/data";
 import Particles from "@/components/site/Particles";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Hero() {
   const name = profile.name;
   const [text, setText] = useState("");
   const [done, setDone] = useState(false);
 
-  // keep refs so we can clean up timers (avoids memory leaks / StrictMode double-invoke issues)
-  const tRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const iRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
   useEffect(() => {
     let i = 0;
-    const speedMs = 150; // typing speed
-    const delayMs = 500; // delay before typing starts
+    const speedMs = 150;
+    const delayMs = 500;
 
-    tRef.current = setTimeout(() => {
-      iRef.current = setInterval(() => {
+    const start = setTimeout(() => {
+      const id = setInterval(() => {
         i++;
         setText(name.slice(0, i));
         if (i >= name.length) {
-          if (iRef.current) clearInterval(iRef.current);
+          clearInterval(id);
           setDone(true);
         }
       }, speedMs);
     }, delayMs);
 
-    return () => {
-      if (tRef.current) clearTimeout(tRef.current);
-      if (iRef.current) clearInterval(iRef.current);
-    };
+    return () => clearTimeout(start);
   }, [name]);
 
   return (
@@ -42,7 +35,7 @@ export default function Hero() {
       id="home"
       className="relative min-h-[100svh] flex items-center justify-center bg-hero-radial overflow-hidden"
     >
-      {/* soft cyan/magenta glows */}
+      {/* subtle glows */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -51,12 +44,9 @@ export default function Hero() {
         }}
       />
 
-      {/* floating particles */}
       <Particles count={90} />
 
-      {/* content */}
       <div className="relative z-[1] text-center px-6">
-        {/* Typewriter heading */}
         <h1
           className="gradient-text inline-block text-[40px] md:text-[86px] font-black leading-[1.05] animate-gradientShift"
           suppressHydrationWarning
@@ -66,7 +56,6 @@ export default function Hero() {
           {!done && <span className="caret align-[-.1em]" />}
         </h1>
 
-        {/* Subtitle */}
         <motion.p
           className="mt-3 text-xl md:text-2xl text-white/60"
           initial={{ opacity: 0, y: 16 }}
@@ -76,7 +65,6 @@ export default function Hero() {
           {profile.role}
         </motion.p>
 
-        {/* Blurb */}
         <motion.p
           className="mt-6 max-w-2xl mx-auto text-base md:text-lg text-white/70"
           initial={{ opacity: 0, y: 16 }}
@@ -86,13 +74,13 @@ export default function Hero() {
           {profile.blurb}
         </motion.p>
 
-        {/* CTA buttons (use <Link> for internal routes to satisfy ESLint) */}
         <motion.div
           className="mt-10 flex items-center justify-center gap-5"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.4 }}
         >
+          {/* to projects section (use Link to avoid ESLint warning) */}
           <Link
             href="/#projects"
             className="rounded-full px-7 py-3.5 font-semibold text-black shadow-lg"
@@ -101,12 +89,15 @@ export default function Hero() {
             View My Work
           </Link>
 
-          <Link
-            href="/#contact"
-            className="rounded-full px-7 py-3.5 font-semibold border-2 border-neonCyan text-white"
+          {/* Download CV (keep as <a> so the file downloads immediately) */}
+          <a
+            href="/cv/Aakash_CV.pdf"
+            download="Aakash_CV.pdf"
+            className="rounded-full px-7 py-3.5 font-semibold border-2 border-neonCyan text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neonCyan/60 transition"
+            aria-label="Download CV"
           >
-            Get In Touch
-          </Link>
+            Download CV
+          </a>
         </motion.div>
       </div>
     </section>
