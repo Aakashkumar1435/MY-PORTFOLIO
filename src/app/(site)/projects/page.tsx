@@ -1,31 +1,21 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import ProjectDetail from "@/components/sections/ProjectDetail";
 import { projects } from "@/lib/data";
+import ProjectCard from "@/components/sections/ProjectCard";
 
-type Params = { slug: string };
-type Props = { params: Promise<Params> };
+export const metadata = { title: "Works" };
 
-const DEFAULT_REPO = "https://github.com/Aakashkumar1435/CrackIt";
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const p = projects.find((x) => x.slug === slug);
-  return { title: p ? `${p.title} — Project` : "Project" };
-}
-
-export default async function ProjectPage({ params }: Props) {
-  const { slug } = await params;
-  const p = projects.find((x) => x.slug === slug);
-  if (!p) notFound();
-
+export default function ProjectsPage() {
   return (
-    <ProjectDetail
-      title={p.title}
-      subtitle={p.summary}
-      description={p.description}
-      tech={p.tech}
-      repoUrl={p.repo || DEFAULT_REPO}  // always pass a URL
-    />
+    <section className="px-6 md:px-10 py-16">
+      <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white/90">
+        WORKS
+      </h1>
+      <p className="mt-2 text-sm text-white/50">Creative projects &amp; experiments</p>
+
+      <div className="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
+        {projects.map((p, i) => (
+          <ProjectCard key={p.slug} p={p} />
+        ))}
+      </div>
+    </section>
   );
 }

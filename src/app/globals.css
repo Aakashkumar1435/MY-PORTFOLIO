@@ -45,3 +45,87 @@ body { outline: 3px solid hotpink !important; }
 }
 .social-link:hover::before { opacity: 1; }
 .social-link > * { position: relative; z-index: 1; }
+
+/* ---------------- Animated Projects Grid utilities ---------------- */
+
+@keyframes gradientWave {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes gradientRotate {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes tagPulse {
+  0%,100% { box-shadow: 0 0 10px rgba(102,126,234,.3); }
+  50% { box-shadow: 0 0 25px rgba(102,126,234,.6); }
+}
+@keyframes iconFloat {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-20px) rotate(5deg); }
+  75% { transform: translateY(-10px) rotate(-5deg); }
+}
+@keyframes iconSpin {
+  0%,100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(360deg); }
+}
+@keyframes pulseGlow {
+  0%,100% { transform: translate(-50%, -50%) scale(1); opacity:.5; }
+  50% { transform: translate(-50%, -50%) scale(1.3); opacity:.8; }
+}
+@keyframes rippleEffect {
+  to { transform: scale(4); opacity: 0; }
+}
+
+.animate-gradientWave { animation: gradientWave 15s ease infinite; }
+.animate-gradientRotate { animation: gradientRotate 8s ease infinite; }
+
+/* Gradient palettes used by the cards */
+.bg-grad-1 { background-image: linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%); }
+.bg-grad-2 { background-image: linear-gradient(135deg,#4facfe 0%,#00f2fe 50%,#43e97b 100%); }
+.bg-grad-3 { background-image: linear-gradient(135deg,#fa709a 0%,#fee140 50%,#30cfd0 100%); }
+.bg-grad-4 { background-image: linear-gradient(135deg,#a8edea 0%,#fed6e3 50%,#d299c2 100%); }
+.bg-grad-5 { background-image: linear-gradient(135deg,#f093fb 0%,#f5576c 50%,#4facfe 100%); }
+.bg-grad-6 { background-image: linear-gradient(135deg,#30cfd0 0%,#330867 50%,#667eea 100%); }
+.bg-grad-7 { background-image: linear-gradient(135deg,#06b6d4 0%,#3b82f6 50%,#8b5cf6 100%); }
+
+/* Little glow circle under icon */
+.glow-circle{
+  position:absolute; width:300px; height:300px; border-radius:50%;
+  background: radial-gradient(circle, rgba(255,255,255,.3) 0%, transparent 70%);
+  top:50%; left:50%; transform: translate(-50%,-50%); animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* Text/tag/badge styles matching your design */
+.tag{
+  display:inline-block; padding:8px 18px; border-radius:25px;
+  background: rgba(102,126,234,.2); border:2px solid rgba(102,126,234,.4);
+  font-size:.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  color:#667eea; animation: tagPulse 2s ease-in-out infinite;
+}
+.project-title{
+  font-size:1.8rem; font-weight:800; margin-bottom:.35rem;
+  background: linear-gradient(135deg,#fff 0%,#667eea 100%);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.project-description{ color:#aaa; line-height:1.7; margin-bottom:1rem; }
+.tech-stack{ display:flex; gap:.5rem; flex-wrap:wrap; }
+.tech-badge{
+  padding:8px 16px; border-radius:12px; font-size:.85rem; font-weight:700; color:#667eea;
+  background: linear-gradient(135deg,rgba(102,126,234,.1) 0%, rgba(118,75,162,.1) 100%);
+  border:1px solid rgba(102,126,234,.3); transition: all .3s ease;
+}
+.tech-badge:hover{
+  background: linear-gradient(135deg,rgba(102,126,234,.3) 0%, rgba(118,75,162,.3) 100%);
+  transform: translateY(-3px); box-shadow: 0 5px 15px rgba(102,126,234,.4);
+}
+
+/* Icon float/spin on hover */
+.icon-wrapper{ animation: iconFloat 4s ease-in-out infinite; }
+.group:hover .icon-wrapper{ animation: iconSpin 2s ease-in-out infinite; }
+
+/* Ripple effect host spans */
+.ripple{
+  position:absolute; border-radius:50%; background:rgba(255,255,255,.3);
+  transform:scale(0); animation: rippleEffect 1s ease-out forwards; pointer-events:none;
+}

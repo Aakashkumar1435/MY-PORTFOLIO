@@ -19,6 +19,8 @@ export const profile = {
   },
 };
 
+// src/lib/data.ts
+
 export type Project = {
   slug: string;
   title: string;
@@ -44,6 +46,7 @@ export const projects: Project[] = [
     tech: ["MongoDB", "Express", "React", "Node.js", "Next.js"],
     status: "complete",
     repo: "https://github.com/Aakashkumar1435/eduproject",
+   
   },
   {
     slug: "synthureai-voice-covers",
@@ -56,6 +59,7 @@ export const projects: Project[] = [
     tech: ["Next.js", "React", "Tailwind", "AI/ML"],
     status: "complete",
     repo: "https://github.com/AlyanTheCodingLegend/SynthureAI",
+  
   },
   {
     slug: "structify-dsa-visualizer",
@@ -68,6 +72,7 @@ export const projects: Project[] = [
     tech: ["Node.js", "Express", "TypeScript"],
     status: "complete",
     repo: "https://github.com/AlyanTheCodingLegend/algostructify",
+    
   },
   {
     slug: "4096-ai-competition",
@@ -80,6 +85,7 @@ export const projects: Project[] = [
     tech: ["JavaScript", "Canvas", "Heuristics"],
     status: "complete",
     repo: null, // code not public
+  
   },
 
   // --- NON-WEB / OTHER LAST ---
@@ -94,6 +100,7 @@ export const projects: Project[] = [
     tech: ["MySQL", "SQL Workbench"],
     status: "complete",
     repo: null,
+  
   },
   {
     slug: "atm-interface-raylib-c",
@@ -106,6 +113,7 @@ export const projects: Project[] = [
     tech: ["C", "Raylib"],
     status: "complete",
     repo: null,
+   
   },
   {
     slug: "live-chat-cpp-netbeans",
@@ -118,8 +126,10 @@ export const projects: Project[] = [
     tech: ["C++", "Sockets"],
     status: "not-completed",
     repo: null,
+   
   },
 ];
+
 
 export const skills = [
   { icon: "⚛️", name: "React" },
